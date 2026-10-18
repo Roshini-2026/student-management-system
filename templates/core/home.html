@@ -3,7 +3,10 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <h1>{{ heading }}</h1>
-    <p>{{ intro }}</p>
-    <a href="{% url 'services' %}">View our services</a>
+<div class="text-center py-5">
+    <h1 class="display-5">{{ heading }}</h1>
+    <p class="lead">{{ intro }}</p>
+    <a href="{% url 'services' %}" class="btn btn-primary btn-lg me-2">View our services</a>
+    <a href="{% url 'contact' %}" class="btn btn-outline-primary btn-lg">Contact us</a>
+</div>
 {% endblock %}

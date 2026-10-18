@@ -14,7 +14,12 @@ class PageTests(TestCase):
     def test_pages_use_base_layout(self):
         response = self.client.get(reverse("about"))
         self.assertTemplateUsed(response, "base.html")
-        self.assertContains(response, "Services")  # navbar link present
+        self.assertContains(response, "Services")  
+
+    def test_static_files_are_linked(self):
+        response = self.client.get(reverse("home"))
+        self.assertContains(response, "css/style.css")
+        self.assertContains(response, "js/main.js")
 
     def test_invalid_url_returns_404(self):
         response = self.client.get("/does-not-exist/")
