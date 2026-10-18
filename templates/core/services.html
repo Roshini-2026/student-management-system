@@ -1,0 +1,22 @@
+
+{% extends "base.html" %}
+
+{% block title %}Services{% endblock %}
+
+{% block content %}
+    <h1>Our Services</h1>
+
+    {% if services %}
+        <p>We offer {{ services|length }} service{{ services|length|pluralize }}.</p>
+        <ul>
+            {% for service in services %}
+                <li>
+                    <strong>{{ service.name }}</strong>: {{ service.description }}
+                    {% if service.featured %}<em>(Featured)</em>{% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No services are available right now.</p>
+    {% endif %}
+{% endblock %}

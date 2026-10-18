@@ -11,6 +11,11 @@ class PageTests(TestCase):
             response = self.client.get(reverse(name))
             self.assertEqual(response.status_code, 200)
 
+    def test_pages_use_base_layout(self):
+        response = self.client.get(reverse("about"))
+        self.assertTemplateUsed(response, "base.html")
+        self.assertContains(response, "Services")  # navbar link present
+
     def test_invalid_url_returns_404(self):
         response = self.client.get("/does-not-exist/")
         self.assertEqual(response.status_code, 404)
