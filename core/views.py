@@ -1,7 +1,8 @@
-from django.shortcuts import render
 
-# Create your views here.
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import redirect, render
+
+from .forms import ContactForm
 
 COMPANY_NAME = "Student Management Co."
 
@@ -33,10 +34,22 @@ def services(request):
 
 
 def contact(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            messages.success(
+                request,
+                "Thank you! Your message has been sent. We will get back to you soon.",
+            )
+            return redirect("contact")
+    else:
+        form = ContactForm()
+
     context = {
         "company_name": COMPANY_NAME,
         "contact_email": "info@example.com",
         "contact_phone": "+91 00000 00000",
+        "form": form,
     }
     return render(request, "core/contact.html", context)
 
