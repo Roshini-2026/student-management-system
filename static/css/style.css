@@ -1,0 +1,77 @@
+
+:root {
+    --brand-primary: #0d6efd;
+    --brand-dark: #212529;
+    --brand-light: #f8f9fa;
+}
+
+body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: var(--brand-dark);
+    background-color: var(--brand-light);
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Navbar */
+.navbar .nav-link {
+    transition: color 0.2s ease;
+}
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* Buttons */
+.btn {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.btn:focus-visible,
+a:focus-visible,
+.form-control:focus {
+    outline: 3px solid rgba(13, 110, 253, 0.5);
+    outline-offset: 2px;
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Tables */
+.table thead {
+    background-color: var(--brand-primary);
+    color: #ffffff;
+}
+
+/* Footer */
+.site-footer {
+    background-color: var(--brand-dark);
+    color: #ced4da;
+}
+
+/* Back-to-top button (shown by JavaScript) */
+#back-to-top {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    display: none;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+}

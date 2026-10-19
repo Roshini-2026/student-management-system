@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<h1>Contact Us</h1>
+<div class="row g-4">
+    <div class="col-12 col-md-5">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Get in touch</h5>
+                <p class="mb-1">Email: {{ contact_email }}</p>
+                <p>Phone: {{ contact_phone }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-7">
+        <form class="needs-validation card card-body" novalidate>
+            <div class="mb-3">
+                <label for="demo-name" class="form-label">Full name</label>
+                <input type="text" id="demo-name" class="form-control" required>
+                <div class="invalid-feedback">Please enter your name.</div>
+            </div>
+            <div class="mb-3">
+                <label for="demo-email" class="form-label">Email</label>
+                <input type="email" id="demo-email" class="form-control" required>
+                <div class="invalid-feedback">Please enter a valid email.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
