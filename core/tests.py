@@ -211,3 +211,80 @@ class StudentCrudTests(TestCase):
     def test_delete_missing_student_returns_404(self):
         response = self.client.post(reverse("student_delete", args=[9999]))
         self.assertEqual(response.status_code, 404)
+
+class StudentSearchTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = get_user_model().objects.create_user(username="tester", password="pass12345")
+        courses = ["Python", "Django", "Java"]
+        for i in range(30):
+            Student.objects.create(
+                full_name=f"Student {i:02d}", email=f"student{i:02d}@example.com",
+                mobile_number="9876543210", gender="M" if i % 2 == 0 else "F",
+                course=courses[i % 3],
+            )
+        Student.objects.create(
+            full_name="Ravi Kumar", email="ravi@example.com",
+            mobile_number="9123456780", gender="M", course="Python",
+        )  # 31 students in total
+
+    def setUp(self):
+        self.client.force_login(self.user)
+        self.url = reverse("student_list")
+
+    def test_search_by_name(self):
+        response = self.client.get(self.url, {"q": "Ravi"})
+        self.assertEqual(response.context["total"], 1)
+
+    def test_search_by_email(self):
+        response = self.client.get(self.url, {"q": "student05@"})
+        self.assertEqual(response.context["total"], 1)
+
+    def test_course_filter(self):
+        response = self.client.get(self.url, {"course": "Java"})
+        self.assertEqual(response.context["total"], 10)
+
+    def test_gender_filter(self):
+        response = self.client.get(self.url, {"gender": "F"})
+        self.assertEqual(response.context["total"], 15)
+
+    def test_search_and_filters_work_together(self):
+        response = self.client.get(self.url, {"q": "Student", "course": "Python", "gender": "F"})
+        self.assertEqual(response.context["total"], 5)
+
+    def test_sort_descending_by_name(self):
+        response = self.client.get(self.url, {"sort": "-full_name"})
+        self.assertEqual(response.context["page_obj"][0].full_name, "Student 29")
+
+    def test_invalid_sort_falls_back_to_default(self):
+        response = self.client.get(self.url, {"sort": "password"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["page_obj"][0].full_name, "Ravi Kumar")
+
+    def test_default_pagination(self):
+        response = self.client.get(self.url)
+        self.assertEqual(len(response.context["page_obj"]), 10)
+        self.assertEqual(response.context["page_obj"].paginator.num_pages, 4)
+
+    def test_page_size_choice(self):
+        response = self.client.get(self.url, {"page_size": "25"})
+        self.assertEqual(len(response.context["page_obj"]), 25)
+
+    def test_invalid_page_size_falls_back_to_default(self):
+        response = self.client.get(self.url, {"page_size": "1000"})
+        self.assertEqual(len(response.context["page_obj"]), 10)
+
+    def test_invalid_page_numbers_are_handled(self):
+        response = self.client.get(self.url, {"page": "abc"})
+        self.assertEqual(response.context["page_obj"].number, 1)
+        response = self.client.get(self.url, {"page": "999"})
+        self.assertEqual(response.context["page_obj"].number, 4)
+
+    def test_pagination_keeps_filters(self):
+        response = self.client.get(self.url, {"q": "Student", "page": "2"})
+        self.assertEqual(response.context["querystring"], "q=Student")
+        self.assertEqual(response.context["page_obj"].number, 2)
+
+    def test_no_match_message(self):
+        response = self.client.get(self.url, {"q": "zzzz"})
+        self.assertContains(response, "No students match your search")
