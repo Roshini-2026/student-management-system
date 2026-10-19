@@ -22,7 +22,14 @@
                 <label for="{{ field.id_for_label }}" class="form-label">
                     {{ field.label }}{% if field.field.required %} *{% endif %}
                 </label>
-                {{ field }}
+                {% if field.name == "phone" or field.name == "mobile_number" %}
+                    <div class="input-group">
+                        <span class="input-group-text">+91</span>
+                        {{ field }}
+                    </div>
+                {% else %}
+                    {{ field }}
+                {% endif %}
                 {% for error in field.errors %}
                     <div class="invalid-feedback d-block">{{ error }}</div>
                 {% endfor %}
