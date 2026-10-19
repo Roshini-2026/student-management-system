@@ -4,11 +4,13 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
-
-from .forms import ContactForm, StudentForm
 from .models import Student
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.utils.http import urlencode
 
-from .forms import ContactForm
+from .forms import ContactForm, StudentFilterForm, StudentForm
+
 
 COMPANY_NAME = "Student Management Co."
 
@@ -70,8 +72,42 @@ def custom_404(request, exception):
 
 @login_required
 def student_list(request):
+    filter_form = StudentFilterForm(request.GET)
+    filter_form.is_valid()  # runs the checks; invalid values are left out of cleaned_data
+    filters = filter_form.cleaned_data
+
     students = Student.objects.all()
-    return render(request, "students/student_list.html", {"students": students})
+
+    search = filters.get("q")
+    if search:
+        students = students.filter(
+            Q(full_name__icontains=search) | Q(email__icontains=search)
+        )
+    if filters.get("course"):
+        students = students.filter(course=filters["course"])
+    if filters.get("gender"):
+        students = students.filter(gender=filters["gender"])
+
+    # "id" is a tie-breaker so the order (and the pages) stay stable
+    students = students.order_by(filters.get("sort") or "full_name", "id")
+
+    page_size = int(filters.get("page_size") or 10)
+    paginator = Paginator(students, page_size)
+    page_obj = paginator.get_page(request.GET.get("page"))
+
+    # Only valid, non-empty values go into the page links
+    querystring = urlencode({key: value for key, value in filters.items() if value})
+
+    context = {
+        "filter_form": filter_form,
+        "page_obj": page_obj,
+        "page_range": paginator.get_elided_page_range(page_obj.number, on_each_side=1, on_ends=1),
+        "ellipsis": paginator.ELLIPSIS,
+        "total": paginator.count,
+        "querystring": querystring,
+        "filters_active": any(filters.get(key) for key in ("q", "course", "gender")),
+    }
+    return render(request, "students/student_list.html", context)
 
 
 @login_required

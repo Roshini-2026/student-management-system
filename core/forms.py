@@ -73,3 +73,30 @@ class StudentForm(BootstrapFormMixin, forms.ModelForm):
 
     def clean_mobile_number(self):
         return clean_phone_number(self.cleaned_data["mobile_number"])
+
+def get_course_choices():
+        """Course dropdown options, read from the database when the form is validated or shown."""
+        courses = Student.objects.order_by("course").values_list("course", flat=True).distinct()
+        return [("", "All courses")] + [(course, course) for course in courses]
+
+class StudentFilterForm(BootstrapFormMixin, forms.Form):
+    SORT_CHOICES = [
+        ("full_name", "Name (A-Z)"),
+        ("-full_name", "Name (Z-A)"),
+        ("-created_at", "Newest registered"),
+        ("created_at", "Oldest registered"),
+    ]
+    PAGE_SIZE_CHOICES = [("10", "10"), ("25", "25"), ("50", "50")]
+
+    q = forms.CharField(max_length=100, required=False, label="Search")
+    course = forms.ChoiceField(choices=get_course_choices, required=False, label="Course")
+    gender = forms.ChoiceField(
+        required=False, label="Gender",
+        choices=[("", "All genders")] + Student.Gender.choices,
+    )
+    sort = forms.ChoiceField(required=False, label="Sort by", choices=SORT_CHOICES)
+    page_size = forms.ChoiceField(required=False, label="Per page", choices=PAGE_SIZE_CHOICES)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["q"].widget.attrs["placeholder"] = "Name or email"
