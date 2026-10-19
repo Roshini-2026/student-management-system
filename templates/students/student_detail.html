@@ -8,17 +8,23 @@
     <dl class="row mb-0">
         <dt class="col-sm-3">Student ID</dt><dd class="col-sm-9">{{ student.id }}</dd>
         <dt class="col-sm-3">Email</dt><dd class="col-sm-9">{{ student.email }}</dd>
-        <dt class="col-sm-3">Mobile</dt><dd class="col-sm-9">{{ student.mobile_number }}</dd>
         <dt class="col-sm-3">Gender</dt><dd class="col-sm-9">{{ student.get_gender_display }}</dd>
-        <dt class="col-sm-3">Date of birth</dt><dd class="col-sm-9">{{ student.date_of_birth|default:"Not provided" }}</dd>
         <dt class="col-sm-3">Course</dt><dd class="col-sm-9">{{ student.course }}</dd>
-        <dt class="col-sm-3">Address</dt><dd class="col-sm-9">{{ student.address|default:"Not provided" }}</dd>
         <dt class="col-sm-3">Status</dt><dd class="col-sm-9">{% if student.is_active %}Active{% else %}Inactive{% endif %}</dd>
+        {% if perms.core.change_student %}
+        <dt class="col-sm-3">Mobile</dt><dd class="col-sm-9">{{ student.mobile_number }}</dd>
+        <dt class="col-sm-3">Date of birth</dt><dd class="col-sm-9">{{ student.date_of_birth|default:"Not provided" }}</dd>
+        <dt class="col-sm-3">Address</dt><dd class="col-sm-9">{{ student.address|default:"Not provided" }}</dd>
+        {% endif %}
         <dt class="col-sm-3">Registered</dt><dd class="col-sm-9">{{ student.created_at }}</dd>
         <dt class="col-sm-3">Last updated</dt><dd class="col-sm-9">{{ student.updated_at }}</dd>
     </dl>
 </div>
+{% if perms.core.change_student %}
 <a href="{% url 'student_update' student.pk %}" class="btn btn-primary">Edit</a>
+{% endif %}
+{% if perms.core.delete_student %}
 <a href="{% url 'student_delete' student.pk %}" class="btn btn-outline-danger">Delete</a>
+{% endif %}
 <a href="{% url 'student_list' %}" class="btn btn-outline-secondary">Back to list</a>
 {% endblock %}

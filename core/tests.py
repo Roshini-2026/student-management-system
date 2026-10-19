@@ -7,7 +7,6 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
-from django.conf import settings
 from django.contrib.auth import get_user_model
 
 from .models import Student
@@ -133,7 +132,7 @@ class StudentModelTests(TestCase):
 
 class StudentCrudTests(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(username="tester", password="pass12345")
+        self.user = get_user_model().objects.create_superuser(username="tester", password="pass12345")
         self.client.force_login(self.user)
         self.student = Student.objects.create(
             full_name="Asha Rao", email="asha@example.com",
@@ -154,7 +153,7 @@ class StudentCrudTests(TestCase):
         self.client.logout()
         url = reverse("student_list")
         response = self.client.get(url)
-        self.assertRedirects(response, f"{settings.LOGIN_URL}?next={url}", fetch_redirect_response=False)
+        self.assertRedirects(response, f"{reverse('login')}?next={url}", fetch_redirect_response=False)
 
     def test_list_shows_students(self):
         response = self.client.get(reverse("student_list"))
@@ -215,7 +214,7 @@ class StudentCrudTests(TestCase):
 class StudentSearchTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.user = get_user_model().objects.create_user(username="tester", password="pass12345")
+        cls.user = get_user_model().objects.create_superuser(username="tester", password="pass12345")
         courses = ["Python", "Django", "Java"]
         for i in range(30):
             Student.objects.create(

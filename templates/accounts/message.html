@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1>{{ title }}</h1>
+    <p>{{ text }}</p>
+    <a href="{% url 'login' %}" class="btn btn-primary">Go to login</a>
+</div>
+{% endblock %}
