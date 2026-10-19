@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 2. Auto-dismiss alerts after 5 seconds
-    document.querySelectorAll(".alert").forEach(function (alertBox) {
+    document.querySelectorAll(".alert-dismissible").forEach(function (alertBox) {
         setTimeout(function () {
             bootstrap.Alert.getOrCreateInstance(alertBox).close();
         }, 5000);
