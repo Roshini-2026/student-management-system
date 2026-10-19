@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.company',
             ],
         },
     },
@@ -85,6 +86,8 @@ DATABASES = {
     }
 }
 
+# Temporary: send logged-out users to the admin login page (replaced in Task 9)
+LOGIN_URL = "/admin/login/"
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators

@@ -7,6 +7,8 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
+from django.conf import settings
+from django.contrib.auth import get_user_model
 
 from .models import Student
 
@@ -36,10 +38,18 @@ class ContactFormTests(TestCase):
         self.valid_data = {
             "full_name": "Asha Rao",
             "email": "asha@example.com",
-            "phone": "+919876543210",
+            "phone": "1234567890",
             "subject": "Course enquiry",
             "message": "I would like more information.",
         }
+    def test_phone_must_be_exactly_10_digits(self):
+        for bad in ["12345", "12345678901", "+911234567890", "12345 67890"]:
+            response = self.client.post(self.url, {**self.valid_data, "phone": bad})
+            self.assertIn("phone", response.context["form"].errors, bad)
+
+    def test_phone_error_message(self):
+        response = self.client.post(self.url, {**self.valid_data, "phone": "123"})
+        self.assertContains(response, "The number should contain 10 digits.")
 
     def test_get_shows_form_with_csrf_token(self):
         response = self.client.get(self.url)
@@ -120,3 +130,84 @@ class StudentModelTests(TestCase):
         )
         names = list(Student.objects.values_list("full_name", flat=True))
         self.assertEqual(names, ["Anil Das", "Asha Rao"])
+
+class StudentCrudTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(username="tester", password="pass12345")
+        self.client.force_login(self.user)
+        self.student = Student.objects.create(
+            full_name="Asha Rao", email="asha@example.com",
+            mobile_number="9876543210", gender="F", course="Python",
+        )
+        self.valid_data = {
+            "full_name": "Ravi Kumar", "email": "ravi@example.com",
+            "mobile_number": "9123456780", "gender": "M",
+            "course": "Django", "is_active": "on",
+        }
+
+    def test_student_mobile_must_be_10_digits(self):
+        data = {**self.valid_data, "mobile_number": "12345"}
+        response = self.client.post(reverse("student_create"), data)
+        self.assertIn("mobile_number", response.context["form"].errors)
+
+    def test_anonymous_user_is_redirected_to_login(self):
+        self.client.logout()
+        url = reverse("student_list")
+        response = self.client.get(url)
+        self.assertRedirects(response, f"{settings.LOGIN_URL}?next={url}", fetch_redirect_response=False)
+
+    def test_list_shows_students(self):
+        response = self.client.get(reverse("student_list"))
+        self.assertContains(response, "Asha Rao")
+
+    def test_list_empty_state(self):
+        Student.objects.all().delete()
+        response = self.client.get(reverse("student_list"))
+        self.assertContains(response, "No students have been registered yet")
+
+    def test_create_valid_student(self):
+        response = self.client.post(reverse("student_create"), self.valid_data, follow=True)
+        self.assertRedirects(response, reverse("student_list"))
+        self.assertTrue(Student.objects.filter(email="ravi@example.com").exists())
+        self.assertContains(response, "registered successfully")
+
+    def test_create_duplicate_email_is_rejected(self):
+        data = {**self.valid_data, "email": "asha@example.com"}
+        response = self.client.post(reverse("student_create"), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("email", response.context["form"].errors)
+        self.assertEqual(Student.objects.count(), 1)
+
+    def test_create_missing_fields_is_rejected(self):
+        response = self.client.post(reverse("student_create"), {})
+        self.assertIn("full_name", response.context["form"].errors)
+        self.assertEqual(Student.objects.count(), 1)
+
+    def test_detail_page(self):
+        response = self.client.get(reverse("student_detail", args=[self.student.pk]))
+        self.assertContains(response, "asha@example.com")
+
+    def test_detail_of_missing_student_returns_404(self):
+        response = self.client.get(reverse("student_detail", args=[9999]))
+        self.assertEqual(response.status_code, 404)
+
+    def test_update_student(self):
+        data = {**self.valid_data, "email": "asha@example.com", "full_name": "Asha Updated"}
+        response = self.client.post(reverse("student_update", args=[self.student.pk]), data)
+        self.assertRedirects(response, reverse("student_detail", args=[self.student.pk]))
+        self.student.refresh_from_db()
+        self.assertEqual(self.student.full_name, "Asha Updated")
+
+    def test_delete_get_only_shows_confirmation(self):
+        response = self.client.get(reverse("student_delete", args=[self.student.pk]))
+        self.assertContains(response, "Are you sure")
+        self.assertTrue(Student.objects.filter(pk=self.student.pk).exists())
+
+    def test_delete_post_removes_student(self):
+        response = self.client.post(reverse("student_delete", args=[self.student.pk]))
+        self.assertRedirects(response, reverse("student_list"))
+        self.assertFalse(Student.objects.filter(pk=self.student.pk).exists())
+
+    def test_delete_missing_student_returns_404(self):
+        response = self.client.post(reverse("student_delete", args=[9999]))
+        self.assertEqual(response.status_code, 404)
