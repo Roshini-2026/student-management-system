@@ -1,13 +1,13 @@
-* manage.py: A command-line tool that lets you interact with your Django project.
+- **manage.py**: command-line tool to run and manage the project (runserver, migrate, startapp).
 
-settings.py: The control center for your project. It stores database connections, installed apps, security keys, and static files.
+- **settings.py**: project configuration: installed apps, database, templates, static files, security settings.
 
-urls.py: It maps web addresses (URLs) to specific Python functions or views.
+- **urls.py**: maps web addresses (URLs) to views.
 
-views.py: The brain of your app logic. It receives web requests, processes data, and sends back a response (like an HTML page or JSON data).
+- **views.py**: receives a request, processes data, and returns a response (HTML page or JSON).
 
-models.py: The blueprint for your database. We will write Python classes here, and Django turns them into database tables
+- **models.py**: Python classes that Django turns into database tables.
 
-asgi.py: A configuration file that helps your project run on modern, asynchronous web servers (handling real-time features like WebSockets).
+- **asgi.py**: entry point for asynchronous web servers (for example WebSockets).
 
-wsgi.py: A configuration file that connects your Django project to traditional, synchronous web servers when launching live in production
+- **wsgi.py**: entry point for traditional synchronous web servers, used when deploying.
