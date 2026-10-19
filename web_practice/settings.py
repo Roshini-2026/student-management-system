@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -86,8 +87,8 @@ DATABASES = {
     }
 }
 
-# Temporary: send logged-out users to the admin login page (replaced in Task 9)
-LOGIN_URL = "/admin/login/"
+LOGIN_URL = "login"            # where logged-out users are sent
+LOGIN_REDIRECT_URL = "home"    # where users go after logging in
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators

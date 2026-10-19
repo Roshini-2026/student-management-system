@@ -1,14 +1,13 @@
 
 from django.contrib import messages
 from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 from .models import Student
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.utils.http import urlencode
-
+from .decorators import permission_needed
 from .forms import ContactForm, StudentFilterForm, StudentForm
 
 
@@ -70,7 +69,7 @@ def custom_404(request, exception):
     return render(request, "404.html", {"company_name": COMPANY_NAME}, status=404)
 
 
-@login_required
+@permission_needed("core.view_student")
 def student_list(request):
     filter_form = StudentFilterForm(request.GET)
     filter_form.is_valid()  # runs the checks; invalid values are left out of cleaned_data
@@ -110,13 +109,13 @@ def student_list(request):
     return render(request, "students/student_list.html", context)
 
 
-@login_required
+@permission_needed("core.view_student")
 def student_detail(request, pk):
     student = get_object_or_404(Student, pk=pk)
     return render(request, "students/student_detail.html", {"student": student})
 
 
-@login_required
+@permission_needed("core.add_student")
 def student_create(request):
     if request.method == "POST":
         form = StudentForm(request.POST)
@@ -129,7 +128,7 @@ def student_create(request):
     return render(request, "students/student_form.html", {"form": form, "title": "Register Student"})
 
 
-@login_required
+@permission_needed("core.change_student")
 def student_update(request, pk):
     student = get_object_or_404(Student, pk=pk)
     if request.method == "POST":
@@ -142,8 +141,7 @@ def student_update(request, pk):
         form = StudentForm(instance=student)
     return render(request, "students/student_form.html", {"form": form, "title": "Edit Student"})
 
-
-@login_required
+@permission_needed("core.delete_student")
 @require_http_methods(["GET", "POST"])
 def student_delete(request, pk):
     student = get_object_or_404(Student, pk=pk)

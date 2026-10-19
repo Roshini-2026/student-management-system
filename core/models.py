@@ -20,6 +20,7 @@ class Student(models.Model):
 
     class Meta:
         ordering = ["full_name"]
+        permissions = [("view_reports", "Can view reports")]
 
     def __str__(self):
         return f"{self.full_name} ({self.email})"

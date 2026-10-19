@@ -25,23 +25,26 @@ def clean_phone_number(value):
 
 
 class BootstrapFormMixin:
-    """Adds Bootstrap classes to every field (red border if it has an error)."""
+    """Adds Bootstrap classes to every field, and a red border to fields with errors."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for name, field in self.fields.items():
             widget = field.widget
             if isinstance(widget, forms.CheckboxInput):
-                css_class = "form-check-input"
+                widget.attrs["class"] = "form-check-input"
             elif isinstance(widget, forms.Select):
-                css_class = "form-select"
+                widget.attrs["class"] = "form-select"
             else:
-                css_class = "form-control"
-            if self.is_bound and name in self.errors:
-                css_class += " is-invalid"
-            widget.attrs["class"] = css_class
+                widget.attrs["class"] = "form-control"
             if name in ("phone", "mobile_number"):
                 widget.attrs.update(PHONE_ATTRS)
+
+    def full_clean(self):
+        super().full_clean()  # run Django's normal validation first
+        for name in self.errors:
+            if name in self.fields:  # "__all__" (form-level errors) is not a field
+                self.fields[name].widget.attrs["class"] += " is-invalid"
 
 
 class ContactForm(BootstrapFormMixin, forms.Form):
