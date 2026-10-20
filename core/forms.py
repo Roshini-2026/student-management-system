@@ -68,10 +68,13 @@ class StudentForm(BootstrapFormMixin, forms.ModelForm):
         fields = [
             "full_name", "email", "mobile_number", "gender", "date_of_birth",
             "course", "enrollment_status", "address", "is_active",
+            "profile_photo", "supporting_document"
         ]
         widgets = {
             "date_of_birth": forms.DateInput(attrs={"type": "date"}),
             "address": forms.Textarea(attrs={"rows": 3}),
+            "profile_photo": forms.ClearableFileInput(attrs={"accept": "image/png,image/jpeg"}),
+            "supporting_document": forms.ClearableFileInput(attrs={"accept": "application/pdf"}),
         }
 
     def __init__(self, *args, **kwargs):

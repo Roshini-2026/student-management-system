@@ -1,6 +1,7 @@
-from django.core.validators import MinValueValidator
-from django.db import models
 
+from django.db import models
+from django.core.validators import FileExtensionValidator, MinValueValidator
+from .files import MaxFileSize, document_path, get_private_storage, photo_path, validate_pdf_content
 
 class Instructor(models.Model):
     full_name = models.CharField(max_length=100)
@@ -55,6 +56,16 @@ class Student(models.Model):
         max_length=10, choices=EnrollmentStatus.choices, default=EnrollmentStatus.ENROLLED
     )
     address = models.TextField(blank=True)
+    profile_photo = models.ImageField(
+        upload_to=photo_path, blank=True,
+        validators=[FileExtensionValidator(["jpg", "jpeg", "png"]), MaxFileSize(2)],
+        help_text="JPG or PNG, up to 2 MB.",
+    )
+    supporting_document = models.FileField(
+        upload_to=document_path, storage=get_private_storage, blank=True,
+        validators=[FileExtensionValidator(["pdf"]), validate_pdf_content, MaxFileSize(5)],
+        help_text="PDF only, up to 5 MB. Visible to Admin and Staff only.",
+    )
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -65,3 +76,23 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.full_name} ({self.email})"
+
+    FILE_FIELDS = ("profile_photo", "supporting_document")
+
+    def save(self, *args, **kwargs):
+        """After saving, delete files that were replaced or cleared."""
+        old = Student.objects.only(*self.FILE_FIELDS).filter(pk=self.pk).first() if self.pk else None
+        super().save(*args, **kwargs)
+        for name in self.FILE_FIELDS if old else ():
+            old_file = getattr(old, name)
+            if old_file and old_file.name != getattr(self, name).name:
+                old_file.delete(save=False)
+
+    def delete(self, *args, **kwargs):
+        """Delete the student's files together with the record."""
+        files = [getattr(self, name) for name in self.FILE_FIELDS]
+        result = super().delete(*args, **kwargs)
+        for file in files:
+            if file:
+                file.delete(save=False)
+        return result

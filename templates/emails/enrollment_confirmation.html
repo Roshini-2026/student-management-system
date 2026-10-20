@@ -1,0 +1,10 @@
+<div style="font-family: Arial, sans-serif; max-width: 560px;">
+    <h2>Enrollment confirmed</h2>
+    <p>Hello {{ student.full_name }},</p>
+    <p>You are now enrolled in <strong>{{ course.name }}</strong> ({{ course.code }}).</p>
+    <ul>
+        <li>Duration: {{ course.duration_weeks }} weeks</li>
+        <li>Fee: {{ course.fee }}</li>
+    </ul>
+    <p>Welcome aboard!<br>{{ company_name }}</p>
+</div>

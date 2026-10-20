@@ -1,0 +1,10 @@
+{% autoescape off %}Hello {{ student.full_name }},
+
+You are now enrolled in {{ course.name }} ({{ course.code }}).
+
+Duration: {{ course.duration_weeks }} weeks
+Fee: {{ course.fee }}
+
+Welcome aboard!
+{{ company_name }}
+{% endautoescape %}
