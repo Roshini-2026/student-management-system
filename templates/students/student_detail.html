@@ -10,6 +10,7 @@
         <dt class="col-sm-3">Email</dt><dd class="col-sm-9">{{ student.email }}</dd>
         <dt class="col-sm-3">Gender</dt><dd class="col-sm-9">{{ student.get_gender_display }}</dd>
         <dt class="col-sm-3">Course</dt><dd class="col-sm-9">{{ student.course }}</dd>
+        <dt class="col-sm-3">Enrollment</dt><dd class="col-sm-9">{{ student.get_enrollment_status_display }}</dd>
         <dt class="col-sm-3">Status</dt><dd class="col-sm-9">{% if student.is_active %}Active{% else %}Inactive{% endif %}</dd>
         {% if perms.core.change_student %}
         <dt class="col-sm-3">Mobile</dt><dd class="col-sm-9">{{ student.mobile_number }}</dd>

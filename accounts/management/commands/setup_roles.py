@@ -4,13 +4,16 @@ from django.core.management.base import BaseCommand
 # role -> {app name: [permission codenames]}
 ROLES = {
     "Admin": {
-        "core": ["view_student", "add_student", "change_student", "delete_student", "view_reports"],
+        "core": [
+            "view_student", "add_student", "change_student", "delete_student", "view_reports",
+            "view_course", "add_course", "change_course", "delete_course",
+            "view_instructor", "add_instructor", "change_instructor", "delete_instructor",
+        ],
         "auth": ["view_user", "add_user", "change_user", "delete_user"],
     },
-    "Staff": {"core": ["view_student", "add_student", "change_student"]},
+    "Staff": {"core": ["view_student", "add_student", "change_student", "view_course"]},
     "Viewer": {"core": ["view_student"]},
 }
-
 
 class Command(BaseCommand):
     help = "Create the Admin, Staff and Viewer groups and give each its permissions."

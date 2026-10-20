@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Instructors{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Instructors</h1>
+    <a href="{% url 'instructor_create' %}" class="btn btn-primary">Add Instructor</a>
+</div>
+
+{% if instructors %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead><tr><th>Name</th><th>Email</th><th>Specialization</th><th>Courses</th><th>Actions</th></tr></thead>
+        <tbody>
+            {% for instructor in instructors %}
+            <tr>
+                <td>{{ instructor.full_name }}</td>
+                <td>{{ instructor.email }}</td>
+                <td>{{ instructor.specialization }}</td>
+                <td>{{ instructor.courses.all|join:", "|default:"-" }}</td>
+                <td>
+                    <a href="{% url 'instructor_update' instructor.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <a href="{% url 'instructor_delete' instructor.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No instructors have been added yet.</div>
+{% endif %}
+{% endblock %}

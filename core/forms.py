@@ -1,9 +1,9 @@
 import re
 
 from django import forms
+from django.db.models import Q
 
-from .models import Student
-
+from .models import Course, Instructor, Student
 PHONE_ERROR = "Enter a valid phone number. The number should contain 10 digits."
 
 # Extra HTML attributes for phone inputs: numeric keypad on mobile, max 10 characters
@@ -66,21 +66,41 @@ class StudentForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = Student
         fields = [
-            "full_name", "email", "mobile_number", "gender",
-            "date_of_birth", "course", "address", "is_active",
+            "full_name", "email", "mobile_number", "gender", "date_of_birth",
+            "course", "enrollment_status", "address", "is_active",
         ]
         widgets = {
             "date_of_birth": forms.DateInput(attrs={"type": "date"}),
             "address": forms.Textarea(attrs={"rows": 3}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Only active courses can be chosen. When editing, the student's current course stays.
+        allowed = Q(status=Course.Status.ACTIVE)
+        if self.instance.course_id:
+            allowed |= Q(pk=self.instance.course_id)
+        self.fields["course"].queryset = Course.objects.filter(allowed)
+
     def clean_mobile_number(self):
         return clean_phone_number(self.cleaned_data["mobile_number"])
 
+
+class CourseForm(BootstrapFormMixin, forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ["name", "code", "description", "duration_weeks", "fee", "status", "instructors"]
+        widgets = {"description": forms.Textarea(attrs={"rows": 3})}
+
+
+class InstructorForm(BootstrapFormMixin, forms.ModelForm):
+    class Meta:
+        model = Instructor
+        fields = ["full_name", "email", "specialization"]
+
 def get_course_choices():
-        """Course dropdown options, read from the database when the form is validated or shown."""
-        courses = Student.objects.order_by("course").values_list("course", flat=True).distinct()
-        return [("", "All courses")] + [(course, course) for course in courses]
+    """Course dropdown options, read from the database when the form is validated or shown."""
+    return [("", "All courses"), *Course.objects.values_list("pk", "name")]
 
 class StudentFilterForm(BootstrapFormMixin, forms.Form):
     SORT_CHOICES = [

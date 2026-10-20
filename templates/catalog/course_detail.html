@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ course.name }}</h1>
+<div class="card card-body mb-4">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Code</dt><dd class="col-sm-9">{{ course.code }}</dd>
+        <dt class="col-sm-3">Description</dt><dd class="col-sm-9">{{ course.description|default:"Not provided" }}</dd>
+        <dt class="col-sm-3">Duration</dt><dd class="col-sm-9">{{ course.duration_weeks }} weeks</dd>
+        <dt class="col-sm-3">Fee</dt><dd class="col-sm-9">{{ course.fee }}</dd>
+        <dt class="col-sm-3">Status</dt><dd class="col-sm-9">{{ course.get_status_display }}</dd>
+        <dt class="col-sm-3">Instructors</dt><dd class="col-sm-9">{{ course.instructors.all|join:", "|default:"None assigned" }}</dd>
+    </dl>
+</div>
+
+<h2>Enrolled students ({{ students|length }})</h2>
+{% if students %}
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <thead><tr><th>Name</th><th>Email</th><th>Enrollment</th></tr></thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td><a href="{% url 'student_detail' student.pk %}">{{ student.full_name }}</a></td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.get_enrollment_status_display }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No students are enrolled in this course yet.</div>
+{% endif %}
+<a href="{% url 'course_list' %}" class="btn btn-outline-secondary">Back to courses</a>
+{% endblock %}

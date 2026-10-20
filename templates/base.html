@@ -26,6 +26,13 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'privacy' %}">Privacy Policy</a></li>
                     {% if perms.core.view_student %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'student_list' %}">Students</a></li>
+                            {% if perms.core.view_course %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'course_list' %}">Courses</a></li>
+                            {% endif %}
+                            {% if perms.core.view_instructor %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'instructor_list' %}">Instructors</a></li>
+                            {% endif %}
+
                     {% endif %}
                     {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">{{ user.first_name|default:user.username }}</a></li>
