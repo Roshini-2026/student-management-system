@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from email.utils import formataddr
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -132,8 +133,36 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
+# ---- File uploads ----
+MEDIA_URL = "/media/"                              # public URL for photos
+MEDIA_ROOT = BASE_DIR / "media"                    # photos are saved here
+PRIVATE_MEDIA_ROOT = BASE_DIR / "private_media"    # documents are saved here (never served directly)
+
+# ---- Email ----
+SENDER_NAME = config("SENDER_NAME", default="Student Management Co.")
+SENDER_ADDRESS = config("SENDER_ADDRESS", default="noreply@example.com")
+DEFAULT_FROM_EMAIL = formataddr((SENDER_NAME, SENDER_ADDRESS))
+
+if config("EMAIL_MODE", default="console") == "smtp":
+    MAILERS = {
+        "default": {
+            "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+            "OPTIONS": {
+                "host": config("EMAIL_HOST"),
+                "port": config("EMAIL_PORT", default=587, cast=int),
+                "username": config("EMAIL_HOST_USER"),
+                "password": config("EMAIL_HOST_PASSWORD"),
+                "use_tls": config("EMAIL_USE_TLS", default=True, cast=bool),
+            },
+        }
+    }
+else:  # development: emails are printed in the terminal
+    MAILERS = {"default": {"BACKEND": "django.core.mail.backends.console.EmailBackend"}}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {"simple": {"format": "{asctime} {levelname} {name}: {message}", "style": "{"}},
+    "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "simple"}},
+    "loggers": {"core.emails": {"handlers": ["console"], "level": "INFO"}},
 }

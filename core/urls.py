@@ -13,6 +13,7 @@ urlpatterns = [
     path("students/<int:pk>/", views.student_detail, name="student_detail"),
     path("students/<int:pk>/edit/", views.student_update, name="student_update"),
     path("students/<int:pk>/delete/", views.student_delete, name="student_delete"),
+    path("students/documents/<str:name>", views.student_document, name="student_document"),
     path("courses/", course_views.CourseList.as_view(), name="course_list"),
     path("courses/add/", course_views.CourseCreate.as_view(), name="course_create"),
     path("courses/<int:pk>/", course_views.CourseDetail.as_view(), name="course_detail"),

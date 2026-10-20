@@ -1,3 +1,12 @@
 
 SECRET_KEY=change-me
 DEBUG=True
+EMAIL_MODE=console
+SENDER_NAME=Student Management Co.
+SENDER_ADDRESS=noreply@example.com
+# Needed only when EMAIL_MODE=smtp
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-username
+EMAIL_HOST_PASSWORD=change-me

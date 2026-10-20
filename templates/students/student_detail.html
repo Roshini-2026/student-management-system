@@ -3,7 +3,12 @@
 {% block title %}{{ student.full_name }}{% endblock %}
 
 {% block content %}
-<h1>{{ student.full_name }}</h1>
+<div class="d-flex align-items-center gap-3 mb-3">
+    {% if student.profile_photo %}
+    <img src="{{ student.profile_photo.url }}" alt="Photo of {{ student.full_name }}" class="img-thumbnail" width="120">
+    {% endif %}
+    <h1 class="mb-0">{{ student.full_name }}</h1>
+</div>
 <div class="card card-body mb-3">
     <dl class="row mb-0">
         <dt class="col-sm-3">Student ID</dt><dd class="col-sm-9">{{ student.id }}</dd>
@@ -22,6 +27,8 @@
     </dl>
 </div>
 {% if perms.core.change_student %}
+<dt class="col-sm-3">Supporting document</dt>
+<dd class="col-sm-9">{% if student.supporting_document %}<a href="{{ student.supporting_document.url }}">Download</a>{% else %}Not provided{% endif %}</dd>
 <a href="{% url 'student_update' student.pk %}" class="btn btn-primary">Edit</a>
 {% endif %}
 {% if perms.core.delete_student %}
