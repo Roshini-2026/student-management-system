@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Courses</h1>
+    {% if perms.core.add_course %}
+    <a href="{% url 'course_create' %}" class="btn btn-primary">Add Course</a>
+    {% endif %}
+</div>
+
+{% if courses %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr><th>Code</th><th>Name</th><th>Duration</th><th>Fee</th><th>Status</th><th>Instructors</th><th>Students</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+            <tr>
+                <td>{{ course.code }}</td>
+                <td>{{ course.name }}</td>
+                <td>{{ course.duration_weeks }} weeks</td>
+                <td>{{ course.fee }}</td>
+                <td>{{ course.get_status_display }}</td>
+                <td>{{ course.instructors.all|join:", "|default:"-" }}</td>
+                <td>{{ course.student_count }}</td>
+                <td>
+                    <a href="{% url 'course_detail' course.pk %}" class="btn btn-sm btn-outline-primary">View</a>
+                    {% if perms.core.change_course %}
+                    <a href="{% url 'course_update' course.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    {% endif %}
+                    {% if perms.core.delete_course %}
+                    <a href="{% url 'course_delete' course.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No courses have been added yet.</div>
+{% endif %}
+{% endblock %}

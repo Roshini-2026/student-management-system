@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group
 from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
+from . import test_utils
 
 from .models import Student
 
@@ -12,10 +13,11 @@ User = get_user_model()
 class RolePermissionTests(TestCase):
     @classmethod
     def setUpTestData(cls):
+        course = test_utils.make_course()
         call_command("setup_roles", verbosity=0)
         cls.student = Student.objects.create(
             full_name="Asha Rao", email="asha@example.com", mobile_number="9876543210",
-            gender="F", course="Python", address="Hyderabad",
+            gender="F", course=course, address="Hyderabad",
         )
         cls.users = {}
         for role in ("Admin", "Staff", "Viewer"):

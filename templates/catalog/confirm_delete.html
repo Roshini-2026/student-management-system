@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Delete {{ noun }}{% endblock %}
+
+{% block content %}
+<h1>Delete {{ noun }}?</h1>
+<div class="alert alert-warning">
+    Are you sure you want to delete <strong>{{ object }}</strong>? This cannot be undone.
+</div>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, delete</button>
+    <a href="{{ cancel_url }}" class="btn btn-outline-secondary">Cancel</a>
+</form>
+{% endblock %}

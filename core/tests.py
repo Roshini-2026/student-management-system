@@ -1,5 +1,5 @@
 from django.test import TestCase
-
+from .test_utils import make_course
 # Create your tests here.
 from django.test import TestCase
 from django.urls import reverse
@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.contrib.auth import get_user_model
-
+from .test_utils import make_course
 from .models import Student
 
 class PageTests(TestCase):
@@ -94,9 +94,10 @@ class ContactFormTests(TestCase):
         self.assertEqual(response.status_code, 403)
 class StudentModelTests(TestCase):
     def setUp(self):
+        self.course = make_course()
         self.student = Student.objects.create(
             full_name="Asha Rao", email="asha@example.com",
-            mobile_number="9876543210", gender="F", course="Python",
+            mobile_number="9876543210", gender="F", course=self.course,
         )
 
     def test_string_representation(self):
@@ -106,11 +107,11 @@ class StudentModelTests(TestCase):
         with self.assertRaises(IntegrityError), transaction.atomic():
             Student.objects.create(
                 full_name="Other", email="asha@example.com",
-                mobile_number="1234567890", gender="M", course="Django",
+                mobile_number="1234567890", gender="M", course=self.course,
             )
 
     def test_required_field_is_enforced(self):
-        student = Student(email="x@example.com", mobile_number="1", gender="M", course="C")
+        student = Student(email="x@example.com", mobile_number="1", gender="M", course=self.course)
         with self.assertRaises(ValidationError):
             student.full_clean()
 
@@ -125,23 +126,24 @@ class StudentModelTests(TestCase):
     def test_default_ordering_is_by_name(self):
         Student.objects.create(
             full_name="Anil Das", email="anil@example.com",
-            mobile_number="1234567890", gender="M", course="Java",
+            mobile_number="1234567890", gender="M", course=self.course,
         )
         names = list(Student.objects.values_list("full_name", flat=True))
         self.assertEqual(names, ["Anil Das", "Asha Rao"])
 
 class StudentCrudTests(TestCase):
     def setUp(self):
+        self.course = make_course()
         self.user = get_user_model().objects.create_superuser(username="tester", password="pass12345")
         self.client.force_login(self.user)
         self.student = Student.objects.create(
             full_name="Asha Rao", email="asha@example.com",
-            mobile_number="9876543210", gender="F", course="Python",
+            mobile_number="9876543210", gender="F", course=self.course,
         )
         self.valid_data = {
             "full_name": "Ravi Kumar", "email": "ravi@example.com",
             "mobile_number": "9123456780", "gender": "M",
-            "course": "Django", "is_active": "on",
+            "course": self.course.pk, "enrollment_status": "enrolled", "is_active": "on",
         }
 
     def test_student_mobile_must_be_10_digits(self):
@@ -215,7 +217,9 @@ class StudentSearchTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = get_user_model().objects.create_superuser(username="tester", password="pass12345")
-        courses = ["Python", "Django", "Java"]
+        cls.python = make_course("PY", "Python")
+        cls.java = make_course("JV", "Java")
+        courses = [cls.python, make_course("DJ", "Django"), cls.java]
         for i in range(30):
             Student.objects.create(
                 full_name=f"Student {i:02d}", email=f"student{i:02d}@example.com",
@@ -224,7 +228,7 @@ class StudentSearchTests(TestCase):
             )
         Student.objects.create(
             full_name="Ravi Kumar", email="ravi@example.com",
-            mobile_number="9123456780", gender="M", course="Python",
+            mobile_number="9123456780", gender="M", course=cls.python,
         )  # 31 students in total
 
     def setUp(self):
@@ -240,7 +244,7 @@ class StudentSearchTests(TestCase):
         self.assertEqual(response.context["total"], 1)
 
     def test_course_filter(self):
-        response = self.client.get(self.url, {"course": "Java"})
+        response = self.client.get(self.url, {"course": self.java.pk})
         self.assertEqual(response.context["total"], 10)
 
     def test_gender_filter(self):
@@ -248,7 +252,7 @@ class StudentSearchTests(TestCase):
         self.assertEqual(response.context["total"], 15)
 
     def test_search_and_filters_work_together(self):
-        response = self.client.get(self.url, {"q": "Student", "course": "Python", "gender": "F"})
+        response = self.client.get(self.url, {"q": "Student", "course": self.python.pk, "gender": "F"})
         self.assertEqual(response.context["total"], 5)
 
     def test_sort_descending_by_name(self):

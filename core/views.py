@@ -75,7 +75,7 @@ def student_list(request):
     filter_form.is_valid()  # runs the checks; invalid values are left out of cleaned_data
     filters = filter_form.cleaned_data
 
-    students = Student.objects.all()
+    students = Student.objects.select_related("course")
 
     search = filters.get("q")
     if search:
@@ -83,7 +83,7 @@ def student_list(request):
             Q(full_name__icontains=search) | Q(email__icontains=search)
         )
     if filters.get("course"):
-        students = students.filter(course=filters["course"])
+        students = students.filter(course_id=filters["course"])
     if filters.get("gender"):
         students = students.filter(gender=filters["gender"])
 
