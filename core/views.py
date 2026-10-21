@@ -1,17 +1,17 @@
 
-from django.contrib import messages
-from django.shortcuts import redirect, render
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_http_methods
-from .models import Student,Course, Instructor 
 from pathlib import Path
-from django.http import FileResponse, Http404
-from django.core.paginator import Paginator
-from django.db.models import Q, Count
-from django.utils.http import urlencode
-from .decorators import permission_needed
-from .forms import ContactForm, StudentFilterForm, StudentForm, DashboardFilterForm
 
+from django.contrib import messages
+from django.core.paginator import Paginator
+from django.db.models import Count, Q
+from django.http import FileResponse, Http404
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.http import urlencode
+from django.views.decorators.http import require_http_methods
+
+from .decorators import permission_needed
+from .forms import ContactForm, DashboardFilterForm, StudentFilterForm, StudentForm
+from .models import Course, Instructor, Student
 
 COMPANY_NAME = "Student Management Co."
 

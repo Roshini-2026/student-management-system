@@ -1,7 +1,15 @@
 
-from django.db import models
 from django.core.validators import FileExtensionValidator, MinValueValidator
-from .files import MaxFileSize, document_path, get_private_storage, photo_path, validate_pdf_content
+from django.db import models
+
+from .files import (
+    MaxFileSize,
+    document_path,
+    get_private_storage,
+    photo_path,
+    validate_pdf_content,
+)
+
 
 class Instructor(models.Model):
     full_name = models.CharField(max_length=100)
@@ -88,11 +96,4 @@ class Student(models.Model):
             if old_file and old_file.name != getattr(self, name).name:
                 old_file.delete(save=False)
 
-    def delete(self, *args, **kwargs):
-        """Delete the student's files together with the record."""
-        files = [getattr(self, name) for name in self.FILE_FIELDS]
-        result = super().delete(*args, **kwargs)
-        for file in files:
-            if file:
-                file.delete(save=False)
-        return result
+ 

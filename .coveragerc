@@ -1,0 +1,5 @@
+[run]
+source = core,accounts,api
+omit =
+    */migrations/*
+    */test*.py

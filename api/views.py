@@ -9,7 +9,6 @@ from core.models import Course, Student
 from .serializers import CourseSerializer, StudentSerializer
 
 
-
 class ModelPermissions(DjangoModelPermissions):
     """Same rules as the website. By default reading needs no permission, so we require 'view' too."""
     perms_map = {

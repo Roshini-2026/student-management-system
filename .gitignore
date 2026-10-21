@@ -9,3 +9,5 @@ staticfiles/
 .vscode/
 .idea/
 private_media/
+.coverage
+htmlcov/

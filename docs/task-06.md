@@ -7,8 +7,11 @@
 - mobile_number: stored as text so a + or leading zero is kept.
 - gender: Male, Female or Other.
 - date_of_birth: optional.
-- course: course name as text for now (changes in Task 11).
+- course: ForeignKey to Course (Task 11). A course with students can't be deleted.
 - address: optional.
+- enrollment_status: Enrolled, Completed or Dropped.
+- profile_photo: optional image (Task 13).
+- supporting_document: optional private PDF (Task 13).
 - is_active: shows whether the student is active.
 - created_at: set once when the record is created.
 - updated_at: changes every time the record is saved.
