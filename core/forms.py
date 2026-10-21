@@ -126,3 +126,15 @@ class StudentFilterForm(BootstrapFormMixin, forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["q"].widget.attrs["placeholder"] = "Name or email"
+
+class DashboardFilterForm(BootstrapFormMixin, forms.Form):
+    course = forms.ModelChoiceField(queryset=Course.objects.all(), required=False, empty_label="All courses")
+    date_from = forms.DateField(required=False, label="Enrolled from", widget=forms.DateInput(attrs={"type": "date"}))
+    date_to = forms.DateField(required=False, label="Enrolled to", widget=forms.DateInput(attrs={"type": "date"}))
+
+    def clean(self):
+        cleaned = super().clean()
+        start, end = cleaned.get("date_from"), cleaned.get("date_to")
+        if start and end and start > end:
+            raise forms.ValidationError("The start date must be on or before the end date.")
+        return cleaned

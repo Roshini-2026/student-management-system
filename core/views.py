@@ -3,14 +3,14 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
-from .models import Student
+from .models import Student,Course, Instructor 
 from pathlib import Path
 from django.http import FileResponse, Http404
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.utils.http import urlencode
 from .decorators import permission_needed
-from .forms import ContactForm, StudentFilterForm, StudentForm
+from .forms import ContactForm, StudentFilterForm, StudentForm, DashboardFilterForm
 
 
 COMPANY_NAME = "Student Management Co."
@@ -163,3 +163,43 @@ def student_document(request, name):
     except FileNotFoundError:
         raise Http404("The file is no longer available.")
     return FileResponse(file, as_attachment=True, filename=f"student-{student.pk}{Path(name).suffix}")
+
+@permission_needed("core.view_reports")
+def dashboard(request):
+    form = DashboardFilterForm(request.GET or None)
+    filters = form.cleaned_data if form.is_valid() else {}  # bad filter values are ignored
+    course, date_from, date_to = (filters.get(key) for key in ("course", "date_from", "date_to"))
+
+    students = Student.objects.all()
+    date_conditions = Q()  # the same date rules, written for the Course -> students join
+    if course:
+        students = students.filter(course=course)
+    if date_from:
+        students = students.filter(created_at__date__gte=date_from)
+        date_conditions &= Q(students__created_at__date__gte=date_from)
+    if date_to:
+        students = students.filter(created_at__date__lte=date_to)
+        date_conditions &= Q(students__created_at__date__lte=date_to)
+
+    # order_by() clears the default ordering, which would otherwise break the grouping
+    status_totals = dict(students.order_by().values_list("enrollment_status").annotate(Count("id")))
+    courses = Course.objects.annotate(student_count=Count("students", filter=date_conditions or None)).order_by("name")
+    if course:
+        courses = courses.filter(pk=course.pk)
+    courses = list(courses)
+
+    context = {
+        "form": form,
+        "total_students": students.count(),
+        "active_courses": Course.objects.filter(status=Course.Status.ACTIVE).count(),
+        "total_instructors": Instructor.objects.count(),
+        "status_counts": [
+            {"label": label, "total": status_totals.get(value, 0)}
+            for value, label in Student.EnrollmentStatus.choices
+        ],
+        "courses": courses,
+        "chart_data": {"labels": [c.name for c in courses], "values": [c.student_count for c in courses]},
+        "recent_students": students.select_related("course").order_by("-created_at")[:5],
+        "recent_activity": students.select_related("course").order_by("-updated_at")[:8],
+    }
+    return render(request, "dashboard.html", context)

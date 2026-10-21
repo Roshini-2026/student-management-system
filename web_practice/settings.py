@@ -45,6 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'accounts',
+    'api',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -165,4 +169,19 @@ LOGGING = {
     "formatters": {"simple": {"format": "{asctime} {levelname} {name}: {message}", "style": "{"}},
     "handlers": {"console": {"class": "logging.StreamHandler", "formatter": "simple"}},
     "loggers": {"core.emails": {"handlers": ["console"], "level": "INFO"}},
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",    # for Postman and React
+        "rest_framework.authentication.SessionAuthentication",  # for the browsable API after logging in
+    ],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "api.pagination.StandardPagination",
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }

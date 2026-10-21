@@ -23,4 +23,5 @@ urlpatterns = [
     path("instructors/add/", course_views.InstructorCreate.as_view(), name="instructor_create"),
     path("instructors/<int:pk>/edit/", course_views.InstructorUpdate.as_view(), name="instructor_update"),
     path("instructors/<int:pk>/delete/", course_views.InstructorDelete.as_view(), name="instructor_delete"),
+    path("dashboard/", views.dashboard, name="dashboard"),
 ]
