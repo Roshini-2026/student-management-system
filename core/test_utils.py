@@ -6,7 +6,9 @@ def make_course(code="PY", name="Python", **extra):
 
 
 def make_student(course, number=1, **extra):
-    return Student.objects.create(
-        full_name=f"Student {number}", email=f"student{number}@example.com",
-        mobile_number="9876543210", gender="M", course=course, **extra,
-    )
+    fields = {
+        "full_name": f"Student {number}", "email": f"student{number}@example.com",
+        "mobile_number": "9876543210", "gender": "M", "course": course,
+        **extra,  # anything passed in replaces the default above
+    }
+    return Student.objects.create(**fields)

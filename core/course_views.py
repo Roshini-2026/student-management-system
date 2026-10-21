@@ -47,7 +47,7 @@ class CourseList(PermissionRequiredMixin, ListView):
     template_name = "catalog/course_list.html"
     context_object_name = "courses"
     # Count in the database, and load all instructors in one extra query (not one per course)
-    queryset = Course.objects.annotate(student_count=Count("students")).prefetch_related("instructors")
+    queryset = Course.objects.annotate(student_count=Count("students")).prefetch_related("instructors").order_by("name")
 
 
 class CourseDetail(PermissionRequiredMixin, DetailView):

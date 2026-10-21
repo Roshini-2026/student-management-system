@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<form method="get" class="card card-body mb-4" novalidate>
+    {% for error in form.non_field_errors %}<div class="alert alert-danger">{{ error }}</div>{% endfor %}
+    <div class="row g-2 align-items-end">
+        {% for field in form %}
+        <div class="col-12 col-md-3">
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+        </div>
+        {% endfor %}
+        <div class="col-12 col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Apply</button>
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Reset</a>
+        </div>
+    </div>
+</form>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3"><div class="card card-body text-center">
+        <div class="fs-2 fw-bold">{{ total_students }}</div><div class="text-muted">Registered students</div></div></div>
+    <div class="col-6 col-lg-3"><div class="card card-body text-center">
+        <div class="fs-2 fw-bold">{{ active_courses }}</div><div class="text-muted">Active courses</div></div></div>
+    <div class="col-6 col-lg-3"><div class="card card-body text-center">
+        <div class="fs-2 fw-bold">{{ total_instructors }}</div><div class="text-muted">Instructors</div></div></div>
+    {% for item in status_counts %}
+    <div class="col-6 col-lg-3"><div class="card card-body text-center">
+        <div class="fs-2 fw-bold">{{ item.total }}</div><div class="text-muted">{{ item.label }}</div></div></div>
+    {% endfor %}
+</div>
+
+{% if total_students == 0 %}
+<div class="alert alert-info">No student records found for the selected filters.</div>
+{% endif %}
+
+<div class="row g-4 mb-4">
+    <div class="col-12 col-lg-7">
+        <div class="card card-body">
+            <h2 class="h5">Students per course</h2>
+            {% if courses %}
+            <canvas id="course-chart" height="140"></canvas>
+            {{ chart_data|json_script:"course-chart-data" }}
+            {% else %}
+            <p class="text-muted mb-0">No courses have been added yet.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-12 col-lg-5">
+        <div class="card card-body">
+            <h2 class="h5">Course totals</h2>
+            <table class="table table-sm mb-0">
+                <thead><tr><th>Course</th><th class="text-end">Students</th></tr></thead>
+                <tbody>
+                    {% for course in courses %}
+                    <tr><td>{{ course.name }}</td><td class="text-end">{{ course.student_count }}</td></tr>
+                    {% empty %}
+                    <tr><td colspan="2" class="text-muted">No courses yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-lg-6">
+        <h2 class="h5">Recently registered students</h2>
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead><tr><th>Name</th><th>Course</th><th>Registered</th></tr></thead>
+                <tbody>
+                    {% for student in recent_students %}
+                    <tr>
+                        <td><a href="{% url 'student_detail' student.pk %}">{{ student.full_name }}</a></td>
+                        <td>{{ student.course.name }}</td>
+                        <td>{{ student.created_at|date:"d M Y" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="3" class="text-muted">No students to show.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-12 col-lg-6">
+        <h2 class="h5">Recent enrollment activity</h2>
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead><tr><th>Student</th><th>Course</th><th>Status</th><th>Updated</th></tr></thead>
+                <tbody>
+                    {% for student in recent_activity %}
+                    <tr>
+                        <td>{{ student.full_name }}</td>
+                        <td>{{ student.course.name }}</td>
+                        <td>{{ student.get_enrollment_status_display }}</td>
+                        <td>{{ student.updated_at|date:"d M Y H:i" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="text-muted">No activity to show.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}
