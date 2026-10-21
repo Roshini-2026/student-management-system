@@ -142,6 +142,13 @@ class UploadTests(UploadTestCase):
         student.delete()
         self.assertFalse(any(path.exists() for path in paths))
 
+    def test_bulk_delete_also_deletes_the_files(self):
+        self.create_with_files(profile_photo=photo(), supporting_document=pdf())
+        student = Student.objects.get()
+        paths = [Path(student.profile_photo.path), Path(student.supporting_document.path)]
+        Student.objects.all().delete()
+        self.assertFalse(any(path.exists() for path in paths))
+    
     def test_photo_is_shown_on_the_detail_page(self):
         self.create_with_files(profile_photo=photo())
         student = Student.objects.get()

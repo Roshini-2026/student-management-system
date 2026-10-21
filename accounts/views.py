@@ -2,7 +2,10 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import (
-    LoginView, PasswordChangeView, PasswordResetConfirmView, PasswordResetView,
+    LoginView,
+    PasswordChangeView,
+    PasswordResetConfirmView,
+    PasswordResetView,
 )
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, render
@@ -10,7 +13,11 @@ from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 
 from .forms import (
-    ChangePasswordForm, LoginForm, RegisterForm, ResetRequestForm, SetNewPasswordForm,
+    ChangePasswordForm,
+    LoginForm,
+    RegisterForm,
+    ResetRequestForm,
+    SetNewPasswordForm,
 )
 
 FORM_TEMPLATE = "accounts/form.html"

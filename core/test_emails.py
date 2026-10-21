@@ -1,3 +1,4 @@
+import logging
 from smtplib import SMTPException
 from unittest.mock import patch
 
@@ -23,6 +24,10 @@ class EnrollmentEmailTests(TestCase):
         cls.course = make_course()
         cls.staff = User.objects.create_user("staff", password="pass12345")
         cls.staff.groups.add(Group.objects.get(name="Staff"))
+    
+    def setUp(self):
+        logging.disable(logging.INFO)  # hide INFO lines in test output (errors still show)
+        self.addCleanup(logging.disable, logging.NOTSET)
 
     def test_email_is_sent_after_the_save_is_committed(self):
         with self.captureOnCommitCallbacks(execute=True):

@@ -1,15 +1,14 @@
-from django.test import TestCase
-from .test_utils import make_course
-# Create your tests here.
-from django.test import TestCase
-from django.urls import reverse
-from django.test import Client, TestCase
-from django.urls import reverse
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
-from django.contrib.auth import get_user_model
-from .test_utils import make_course
+from django.test import Client, TestCase
+
+# Create your tests here.
+from django.urls import reverse
+
 from .models import Student
+from .test_utils import make_course
+
 
 class PageTests(TestCase):
     def test_pages_load(self):

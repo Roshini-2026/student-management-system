@@ -4,6 +4,7 @@ from django import forms
 from django.db.models import Q
 
 from .models import Course, Instructor, Student
+
 PHONE_ERROR = "Enter a valid phone number. The number should contain 10 digits."
 
 # Extra HTML attributes for phone inputs: numeric keypad on mobile, max 10 characters

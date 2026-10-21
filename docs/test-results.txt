@@ -1,0 +1,210 @@
+Creating test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+Found 164 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: django_filters, messages, rest_framework, staticfiles
+  Apply all migrations: admin, auth, authtoken, contenttypes, core, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying authtoken.0001_initial... OK
+  Applying authtoken.0002_auto_20160226_1747... OK
+  Applying authtoken.0003_tokenproxy... OK
+  Applying authtoken.0004_alter_tokenproxy_options... OK
+  Applying core.0001_initial... OK
+  Applying core.0002_alter_student_options... OK
+  Applying core.0003_course_instructor_student_enrollment_status_and_more... OK
+  Applying core.0004_student_profile_photo_student_supporting_document... OK
+  Applying sessions.0001_initial...test_invalid_login_is_rejected (accounts.tests.LoginLogoutTests.test_invalid_login_is_rejected) ... ok
+test_login_error_does_not_reveal_which_part_was_wrong (accounts.tests.LoginLogoutTests.test_login_error_does_not_reveal_which_part_was_wrong) ... ok
+test_logout_by_link_is_not_allowed (accounts.tests.LoginLogoutTests.test_logout_by_link_is_not_allowed) ... ok
+test_logout_ends_the_session (accounts.tests.LoginLogoutTests.test_logout_ends_the_session) ... ok
+test_profile_requires_login (accounts.tests.LoginLogoutTests.test_profile_requires_login) ... ok
+test_profile_shows_user_details (accounts.tests.LoginLogoutTests.test_profile_shows_user_details) ... ok
+test_valid_login (accounts.tests.LoginLogoutTests.test_valid_login) ... ok
+test_change_password (accounts.tests.PasswordTests.test_change_password) ... ok
+test_change_password_requires_login (accounts.tests.PasswordTests.test_change_password_requires_login) ... ok
+test_change_password_with_wrong_old_password (accounts.tests.PasswordTests.test_change_password_with_wrong_old_password) ... ok
+test_reset_for_unknown_address_looks_the_same_but_sends_nothing (accounts.tests.PasswordTests.test_reset_for_unknown_address_looks_the_same_but_sends_nothing) ... ok
+test_reset_sends_email_for_known_address (accounts.tests.PasswordTests.test_reset_sends_email_for_known_address) ... ok
+test_duplicate_email_is_rejected_ignoring_case (accounts.tests.RegistrationTests.test_duplicate_email_is_rejected_ignoring_case) ... ok
+test_duplicate_username_is_rejected (accounts.tests.RegistrationTests.test_duplicate_username_is_rejected) ... ok
+test_missing_fields_are_rejected (accounts.tests.RegistrationTests.test_missing_fields_are_rejected) ... ok
+test_password_mismatch_is_rejected (accounts.tests.RegistrationTests.test_password_mismatch_is_rejected) ... ok
+test_valid_registration (accounts.tests.RegistrationTests.test_valid_registration) ... ok
+test_weak_password_is_rejected (accounts.tests.RegistrationTests.test_weak_password_is_rejected) ... ok
+test_token_login_and_use (api.tests.AuthenticationTests.test_token_login_and_use) ... ok
+test_unauthenticated_requests_are_rejected (api.tests.AuthenticationTests.test_unauthenticated_requests_are_rejected) ... ok
+test_wrong_credentials_get_no_token (api.tests.AuthenticationTests.test_wrong_credentials_get_no_token) ... ok
+test_access_by_role (api.tests.CourseApiTests.test_access_by_role) ... ok
+test_course_with_students_cannot_be_deleted (api.tests.CourseApiTests.test_course_with_students_cannot_be_deleted) ... ok
+test_invalid_course_is_rejected (api.tests.CourseApiTests.test_invalid_course_is_rejected) ... ok
+test_list_and_detail_show_student_counts (api.tests.CourseApiTests.test_list_and_detail_show_student_counts) ... ok
+test_missing_course_returns_404 (api.tests.CourseApiTests.test_missing_course_returns_404) ... ok
+test_only_admin_can_create_update_and_delete (api.tests.CourseApiTests.test_only_admin_can_create_update_and_delete) ... ok
+test_search_and_status_filter (api.tests.CourseApiTests.test_search_and_status_filter) ... ok
+test_invalid_page_returns_404 (api.tests.StudentApiTests.test_invalid_page_returns_404) ... ok
+test_invalid_values_are_rejected (api.tests.StudentApiTests.test_invalid_values_are_rejected) ... ok
+test_list_does_not_run_a_query_per_row (api.tests.StudentApiTests.test_list_does_not_run_a_query_per_row) ... ok
+test_list_is_paginated (api.tests.StudentApiTests.test_list_is_paginated) ... ok
+test_malformed_json_returns_400 (api.tests.StudentApiTests.test_malformed_json_returns_400) ... ok
+test_missing_fields_return_validation_errors (api.tests.StudentApiTests.test_missing_fields_return_validation_errors) ... ok
+test_only_admin_can_delete (api.tests.StudentApiTests.test_only_admin_can_delete) ... ok
+test_put_and_patch (api.tests.StudentApiTests.test_put_and_patch) ... ok
+test_retrieve_one_and_missing_and_invalid_ids (api.tests.StudentApiTests.test_retrieve_one_and_missing_and_invalid_ids) ... ok
+test_search_filter_and_ordering (api.tests.StudentApiTests.test_search_filter_and_ordering) ... ok
+test_staff_can_create (api.tests.StudentApiTests.test_staff_can_create) ... ok
+test_viewer_cannot_create (api.tests.StudentApiTests.test_viewer_cannot_create) ... ok
+test_viewer_does_not_see_private_fields_but_staff_does (api.tests.StudentApiTests.test_viewer_does_not_see_private_fields_but_staff_does) ... ok
+test_bulk_action_marks_students_completed (core.test_catalog.AdminSiteTests.test_bulk_action_marks_students_completed) ... ok
+test_course_admin_shows_student_counts (core.test_catalog.AdminSiteTests.test_course_admin_shows_student_counts) ... ok
+test_non_staff_users_cannot_open_admin (core.test_catalog.AdminSiteTests.test_non_staff_users_cannot_open_admin) ... ok
+test_student_admin_groups_fields_into_sections (core.test_catalog.AdminSiteTests.test_student_admin_groups_fields_into_sections) ... ok
+test_student_admin_search (core.test_catalog.AdminSiteTests.test_student_admin_search) ... ok
+test_access_by_role (core.test_catalog.CatalogViewTests.test_access_by_role) ... ok
+test_admin_can_create_course (core.test_catalog.CatalogViewTests.test_admin_can_create_course) ... ok
+test_anonymous_user_is_sent_to_login (core.test_catalog.CatalogViewTests.test_anonymous_user_is_sent_to_login) ... ok
+test_course_detail_lists_enrolled_students (core.test_catalog.CatalogViewTests.test_course_detail_lists_enrolled_students) ... ok
+test_course_list_shows_student_count (core.test_catalog.CatalogViewTests.test_course_list_shows_student_count) ... ok
+test_course_with_students_cannot_be_deleted_from_the_page (core.test_catalog.CatalogViewTests.test_course_with_students_cannot_be_deleted_from_the_page) ... ok
+test_empty_course_can_be_deleted_from_the_page (core.test_catalog.CatalogViewTests.test_empty_course_can_be_deleted_from_the_page) ... ok
+test_invalid_course_is_rejected (core.test_catalog.CatalogViewTests.test_invalid_course_is_rejected) ... ok
+test_list_pages_do_not_run_a_query_per_row (core.test_catalog.CatalogViewTests.test_list_pages_do_not_run_a_query_per_row) ... ok
+test_missing_course_returns_404 (core.test_catalog.CatalogViewTests.test_missing_course_returns_404) ... ok
+test_staff_cannot_create_course (core.test_catalog.CatalogViewTests.test_staff_cannot_create_course) ... ok
+test_student_detail_shows_course (core.test_catalog.CatalogViewTests.test_student_detail_shows_course) ... ok
+test_course_code_must_be_unique (core.test_catalog.RelationshipTests.test_course_code_must_be_unique) ... ok
+test_course_with_students_cannot_be_deleted (core.test_catalog.RelationshipTests.test_course_with_students_cannot_be_deleted) ... ok
+test_course_without_students_can_be_deleted (core.test_catalog.RelationshipTests.test_course_without_students_can_be_deleted) ... ok
+test_deleting_instructor_keeps_the_course (core.test_catalog.RelationshipTests.test_deleting_instructor_keeps_the_course) ... ok
+test_inactive_course_cannot_be_chosen_for_a_student (core.test_catalog.RelationshipTests.test_inactive_course_cannot_be_chosen_for_a_student) ... ok
+test_instructor_email_must_be_unique (core.test_catalog.RelationshipTests.test_instructor_email_must_be_unique) ... ok
+test_instructors_and_courses_are_many_to_many (core.test_catalog.RelationshipTests.test_instructors_and_courses_are_many_to_many) ... ok
+test_invalid_fee_and_duration_are_rejected (core.test_catalog.RelationshipTests.test_invalid_fee_and_duration_are_rejected) ... ok
+test_access_by_role (core.test_dashboard.DashboardTests.test_access_by_role) ... ok
+test_anonymous_user_is_sent_to_login (core.test_dashboard.DashboardTests.test_anonymous_user_is_sent_to_login) ... ok
+test_course_filter (core.test_dashboard.DashboardTests.test_course_filter) ... ok
+test_dashboard_reflects_new_students (core.test_dashboard.DashboardTests.test_dashboard_reflects_new_students) ... ok
+test_date_filter (core.test_dashboard.DashboardTests.test_date_filter) ... ok
+test_empty_database_is_handled (core.test_dashboard.DashboardTests.test_empty_database_is_handled) ... ok
+test_filters_work_together (core.test_dashboard.DashboardTests.test_filters_work_together) ... ok
+test_garbage_filter_values_do_not_crash (core.test_dashboard.DashboardTests.test_garbage_filter_values_do_not_crash) ... ok
+test_invalid_date_range_shows_an_error_and_is_ignored (core.test_dashboard.DashboardTests.test_invalid_date_range_shows_an_error_and_is_ignored) ... ok
+test_number_of_queries_does_not_grow_with_data (core.test_dashboard.DashboardTests.test_number_of_queries_does_not_grow_with_data) ... ok
+test_recent_lists_are_newest_first (core.test_dashboard.DashboardTests.test_recent_lists_are_newest_first) ... ok
+test_students_grouped_by_status (core.test_dashboard.DashboardTests.test_students_grouped_by_status) ... ok
+test_students_per_course_include_empty_courses (core.test_dashboard.DashboardTests.test_students_per_course_include_empty_courses) ... ok
+test_totals_come_from_the_database (core.test_dashboard.DashboardTests.test_totals_come_from_the_database) ... ok
+test_editing_a_student_does_not_send_another_email (core.test_emails.EnrollmentEmailTests.test_editing_a_student_does_not_send_another_email) ... 2026-10-21 16:03:49,011 INFO core.emails: Enrollment email sent for student id=1
+ok
+test_email_failure_keeps_the_student_and_is_logged (core.test_emails.EnrollmentEmailTests.test_email_failure_keeps_the_student_and_is_logged) ... ok
+test_email_has_the_right_content (core.test_emails.EnrollmentEmailTests.test_email_has_the_right_content) ... 2026-10-21 16:03:49,021 INFO core.emails: Enrollment email sent for student id=1
+ok
+test_email_is_sent_after_the_save_is_committed (core.test_emails.EnrollmentEmailTests.test_email_is_sent_after_the_save_is_committed) ... 2026-10-21 16:03:49,024 INFO core.emails: Enrollment email sent for student id=1
+ok
+test_email_waits_for_the_commit (core.test_emails.EnrollmentEmailTests.test_email_waits_for_the_commit) ... ok
+test_invalid_registration_sends_no_email (core.test_emails.EnrollmentEmailTests.test_invalid_registration_sends_no_email) ... ok
+test_web_registration_sends_one_email_and_a_repeat_sends_none (core.test_emails.EnrollmentEmailTests.test_web_registration_sends_one_email_and_a_repeat_sends_none) ... 2026-10-21 16:03:49,054 INFO core.emails: Enrollment email sent for student id=1
+ok
+test_anonymous_user_is_sent_to_login (core.test_files.DocumentAccessTests.test_anonymous_user_is_sent_to_login) ... ok
+test_document_link_is_shown_only_to_staff (core.test_files.DocumentAccessTests.test_document_link_is_shown_only_to_staff) ... ok
+test_document_missing_from_disk_returns_404 (core.test_files.DocumentAccessTests.test_document_missing_from_disk_returns_404) ... ok
+test_staff_can_download_the_document (core.test_files.DocumentAccessTests.test_staff_can_download_the_document) ... ok
+test_unknown_document_returns_404 (core.test_files.DocumentAccessTests.test_unknown_document_returns_404) ... ok
+test_viewer_cannot_download_the_document (core.test_files.DocumentAccessTests.test_viewer_cannot_download_the_document) ... ok
+test_bulk_delete_also_deletes_the_files (core.test_files.UploadTests.test_bulk_delete_also_deletes_the_files) ... ok
+test_clearing_a_file_removes_it (core.test_files.UploadTests.test_clearing_a_file_removes_it) ... ok
+test_deleting_a_student_deletes_their_files (core.test_files.UploadTests.test_deleting_a_student_deletes_their_files) ... ok
+test_documents_are_stored_outside_the_public_media_folder (core.test_files.UploadTests.test_documents_are_stored_outside_the_public_media_folder) ... ok
+test_editing_without_new_files_keeps_the_existing_ones (core.test_files.UploadTests.test_editing_without_new_files_keeps_the_existing_ones) ... ok
+test_invalid_documents_are_rejected (core.test_files.UploadTests.test_invalid_documents_are_rejected) ... ok
+test_invalid_photos_are_rejected (core.test_files.UploadTests.test_invalid_photos_are_rejected) ... ok
+test_photo_is_shown_on_the_detail_page (core.test_files.UploadTests.test_photo_is_shown_on_the_detail_page) ... ok
+test_replacing_a_file_deletes_the_old_one (core.test_files.UploadTests.test_replacing_a_file_deletes_the_old_one) ... ok
+test_valid_files_are_saved_with_safe_random_names (core.test_files.UploadTests.test_valid_files_are_saved_with_safe_random_names) ... ok
+test_admin_can_delete (core.test_roles.RolePermissionTests.test_admin_can_delete) ... ok
+test_anonymous_user_is_sent_to_login (core.test_roles.RolePermissionTests.test_anonymous_user_is_sent_to_login) ... ok
+test_every_role_can_view_students (core.test_roles.RolePermissionTests.test_every_role_can_view_students) ... ok
+test_forbidden_page_shows_message (core.test_roles.RolePermissionTests.test_forbidden_page_shows_message) ... ok
+test_page_access_by_role (core.test_roles.RolePermissionTests.test_page_access_by_role) ... ok
+test_staff_cannot_delete (core.test_roles.RolePermissionTests.test_staff_cannot_delete) ... ok
+test_staff_sees_details_and_edit_but_not_delete (core.test_roles.RolePermissionTests.test_staff_sees_details_and_edit_but_not_delete) ... ok
+test_user_with_no_role_is_denied (core.test_roles.RolePermissionTests.test_user_with_no_role_is_denied) ... ok
+test_viewer_cannot_create_edit_or_delete_by_post (core.test_roles.RolePermissionTests.test_viewer_cannot_create_edit_or_delete_by_post) ... ok
+test_viewer_does_not_see_sensitive_details_or_buttons (core.test_roles.RolePermissionTests.test_viewer_does_not_see_sensitive_details_or_buttons) ... ok
+test_forms_include_csrf_tokens (core.test_security.SecurityTests.test_forms_include_csrf_tokens) ... ok
+test_post_without_csrf_token_is_rejected (core.test_security.SecurityTests.test_post_without_csrf_token_is_rejected) ... ok
+test_server_errors_do_not_show_internal_details (core.test_security.SecurityTests.test_server_errors_do_not_show_internal_details) ... ok
+test_session_cookie_is_http_only (core.test_security.SecurityTests.test_session_cookie_is_http_only) ... ok
+test_viewer_cannot_read_private_fields_through_the_api (core.test_security.SecurityTests.test_viewer_cannot_read_private_fields_through_the_api) ... ok
+test_csrf_protection_is_enforced (core.tests.ContactFormTests.test_csrf_protection_is_enforced) ... ok
+test_empty_submission_is_rejected (core.tests.ContactFormTests.test_empty_submission_is_rejected) ... ok
+test_entered_values_are_preserved_on_error (core.tests.ContactFormTests.test_entered_values_are_preserved_on_error) ... ok
+test_get_shows_form_with_csrf_token (core.tests.ContactFormTests.test_get_shows_form_with_csrf_token) ... ok
+test_invalid_email_is_rejected (core.tests.ContactFormTests.test_invalid_email_is_rejected) ... ok
+test_invalid_phone_is_rejected (core.tests.ContactFormTests.test_invalid_phone_is_rejected) ... ok
+test_phone_error_message (core.tests.ContactFormTests.test_phone_error_message) ... ok
+test_phone_is_optional (core.tests.ContactFormTests.test_phone_is_optional) ... ok
+test_phone_must_be_exactly_10_digits (core.tests.ContactFormTests.test_phone_must_be_exactly_10_digits) ... ok
+test_valid_submission_redirects_with_success_message (core.tests.ContactFormTests.test_valid_submission_redirects_with_success_message) ... ok
+test_invalid_url_returns_404 (core.tests.PageTests.test_invalid_url_returns_404) ... ok
+test_pages_load (core.tests.PageTests.test_pages_load) ... ok
+test_pages_use_base_layout (core.tests.PageTests.test_pages_use_base_layout) ... ok
+test_static_files_are_linked (core.tests.PageTests.test_static_files_are_linked) ... ok
+test_anonymous_user_is_redirected_to_login (core.tests.StudentCrudTests.test_anonymous_user_is_redirected_to_login) ... ok
+test_create_duplicate_email_is_rejected (core.tests.StudentCrudTests.test_create_duplicate_email_is_rejected) ... ok
+test_create_missing_fields_is_rejected (core.tests.StudentCrudTests.test_create_missing_fields_is_rejected) ... ok
+test_create_valid_student (core.tests.StudentCrudTests.test_create_valid_student) ... ok
+test_delete_get_only_shows_confirmation (core.tests.StudentCrudTests.test_delete_get_only_shows_confirmation) ... ok
+test_delete_missing_student_returns_404 (core.tests.StudentCrudTests.test_delete_missing_student_returns_404) ... ok
+test_delete_post_removes_student (core.tests.StudentCrudTests.test_delete_post_removes_student) ... ok
+test_detail_of_missing_student_returns_404 (core.tests.StudentCrudTests.test_detail_of_missing_student_returns_404) ... ok
+test_detail_page (core.tests.StudentCrudTests.test_detail_page) ... ok
+test_list_empty_state (core.tests.StudentCrudTests.test_list_empty_state) ... ok
+test_list_shows_students (core.tests.StudentCrudTests.test_list_shows_students) ... ok
+test_student_mobile_must_be_10_digits (core.tests.StudentCrudTests.test_student_mobile_must_be_10_digits) ... ok
+test_update_student (core.tests.StudentCrudTests.test_update_student) ... ok
+test_default_ordering_is_by_name (core.tests.StudentModelTests.test_default_ordering_is_by_name) ... ok
+test_duplicate_email_is_rejected (core.tests.StudentModelTests.test_duplicate_email_is_rejected) ... ok
+test_optional_fields_can_be_empty (core.tests.StudentModelTests.test_optional_fields_can_be_empty) ... ok
+test_required_field_is_enforced (core.tests.StudentModelTests.test_required_field_is_enforced) ... ok
+test_string_representation (core.tests.StudentModelTests.test_string_representation) ... ok
+test_timestamps_are_set (core.tests.StudentModelTests.test_timestamps_are_set) ... ok
+test_course_filter (core.tests.StudentSearchTests.test_course_filter) ... ok
+test_default_pagination (core.tests.StudentSearchTests.test_default_pagination) ... ok
+test_gender_filter (core.tests.StudentSearchTests.test_gender_filter) ... ok
+test_invalid_page_numbers_are_handled (core.tests.StudentSearchTests.test_invalid_page_numbers_are_handled) ... ok
+test_invalid_page_size_falls_back_to_default (core.tests.StudentSearchTests.test_invalid_page_size_falls_back_to_default) ... ok
+test_invalid_sort_falls_back_to_default (core.tests.StudentSearchTests.test_invalid_sort_falls_back_to_default) ... ok
+test_no_match_message (core.tests.StudentSearchTests.test_no_match_message) ... ok
+test_page_size_choice (core.tests.StudentSearchTests.test_page_size_choice) ... ok
+test_pagination_keeps_filters (core.tests.StudentSearchTests.test_pagination_keeps_filters) ... ok
+test_search_and_filters_work_together (core.tests.StudentSearchTests.test_search_and_filters_work_together) ... ok
+test_search_by_email (core.tests.StudentSearchTests.test_search_by_email) ... ok
+test_search_by_name (core.tests.StudentSearchTests.test_search_by_name) ... ok
+test_sort_descending_by_name (core.tests.StudentSearchTests.test_sort_descending_by_name) ... ok
+
+----------------------------------------------------------------------
+Ran 164 tests in 82.636s
+
+OK
+Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+ OK
+System check identified no issues (0 silenced).
